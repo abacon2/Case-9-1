@@ -63,24 +63,39 @@ class GreenvilleRevenue
         {
             Write("Enter contestant name >> ");
             entryString = ReadLine();
-            Contestant aWorker = new Contestant { Name = entryString };
+            //ProfM2 - here you are getting the StackOverflow exception because your property setter is just calling itself recursively. You will read of this in chapter 10 p. 444
+            //Contestant aWorker = new Contestant { Name = entryString };
+            //ProfM2 - instead of instantiating your Contestant this way, use the Contestant array that is passed into this method
             WriteLine("Talent codes are:");
-            for (int y = 0; y < aWorker.talentCodes.Length; ++y)
-                WriteLine(" {0}  {1}", aWorker.talentCodes, aWorker.talentCodesStrings);
+            //ProfM2 - use the Contestant class static array
+            for (int y = 0; y < Contestant.talentCodesStrings.Length; ++y)
+                WriteLine("  {0}   {1}", Contestant.talentCodes[y], Contestant.talentCodesStrings[y]);
             Write("   Enter talent code >>");
             talent = Convert.ToChar(ReadLine());
             isValid = false;
             while(!isValid)
             {
-                for(int z = 0; z < aWorker.talentCodes.Length; ++z)
+                //ProfM2 - commented your code 79 thru 86
+                //for (int z = 0; z < aWorker.talentCodes.Length; ++z)
+                //{
+                //    if(talent == aWorker.talentCodes[z])
+                //    {
+                //        isValid = true;
+                //        ++aWorker.counts[z];
+                //    }
+                //}
+                //ProfM2 - use a conditional to check the input and then instantiate a Contestant in the current array index [x]
+                if (!char.TryParse(ReadLine(), out talent))
                 {
-                    if(talent == aWorker.talentCodes[z])
-                    {
-                        isValid = true;
-                        ++aWorker.counts[z];
-                    }
+                    WriteLine("Invalid format - entry must be a single character");
                 }
-                if(!isValid)
+                else
+                {
+                    contestants[x] = new Contestant();
+                    //you set the talent code and name here
+                }
+                //ProfM2 - this if condition is good but not necessary for the assignment so I would remove the if
+                if (!isValid)
                 {
                     WriteLine("{0} is not a valid code", talent);
                     Write("  enter talent code >> ");
@@ -91,23 +106,27 @@ class GreenvilleRevenue
 
         }
     }
-        public static void GetLists(int numThisYear, Contestant[] contestants)
+    //ProfM2 - you need to match the method names that MindTap expects    
+    public static void getLists(int numThisYear, Contestant[] contestants)
         {
             int x;
             char QUIT = 'Z';
             char option = 'A';
+            //ProfM2 - use the static talentCodesStrings and talentCodesStrings arrays below to remove the errors below in this method
             Contestant aWorker = new Contestant { TalentCode = option };
             bool isValid;
             int pos = 0;
             bool found;
             WriteLine("\nThe types of talents are:");
         for (x = 0; x < aWorker.counts.Length; ++x)
+            //ProfM2 - use the static talentCodesStrings
             WriteLine("{0. -20}  {1, 5}", aWorker.talentCodesStrings[x], aWorker.counts[x]);
         Write("Enter a talent type or {0} to quit >> ", QUIT);
         option = Convert.ToChar(ReadLine());
         while(option != QUIT)
         {
             isValid = false;
+            //ProfM2 - use the static talentCodes
             for (int z = 0; z < aWorker.talentCodes.Length; ++z) 
             {
                 if (option == aWorker.talentCodes[z])
@@ -121,6 +140,7 @@ class GreenvilleRevenue
                 WriteLine("{0} is not a valid code", option);
             else
             {
+                //ProfM2 - use the static talentCodesStrings
                 WriteLine("\nContestants with talent {0} are:", aWorker.talentCodesStrings[pos]);
                 found = false;
                 for(x = 0; x < numThisYear; ++x)
@@ -132,6 +152,7 @@ class GreenvilleRevenue
                     }
                 }
                 if (!found)
+                    //ProfM2 - use the static talentCodesStrings
                     WriteLine("no contestants had talent {0}", aWorker.talentCodesStrings[pos]);
             }
             Write("\nEnter a talent type or {0} to quit >> ", QUIT);
@@ -142,8 +163,10 @@ class GreenvilleRevenue
 class Contestant
     {
         public int[] counts = { 0, 0, 0, 0 };
-        public char[] talentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
-        public string[] talentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
+        //ProfM2 - this field needs to be static as per the start code
+        public static char[] talentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
+        //ProfM2 - this field needs to be static as per the start code
+        public static string[] talentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
         public string Name
         {
             get { return Name; }
