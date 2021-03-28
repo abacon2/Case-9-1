@@ -62,14 +62,15 @@ class GreenvilleRevenue
         while (x < numThisYear)
         {
             Write("Enter contestant name >> ");
-            entryString = ReadLine();
+            Contestant.Names[x] = ReadLine();
             //ProfM2 - here you are getting the StackOverflow exception because your property setter is just calling itself recursively. You will read of this in chapter 10 p. 444
             //Contestant aWorker = new Contestant { Name = entryString };
             //ProfM2 - instead of instantiating your Contestant this way, use the Contestant array that is passed into this method
             WriteLine("Talent codes are:");
             //ProfM2 - use the Contestant class static array
-            for (int y = 0; y < Contestant.talentCodesStrings.Length; ++y)
-                WriteLine("  {0}   {1}", Contestant.talentCodes[y], Contestant.talentCodesStrings[y]);
+
+            for (int y = 0; y < contestants.Length; ++y)
+                WriteLine("  {0}   {1}", Contestant.TalentCodes[y] , Contestant.TalentCodesStrings[y]);
             Write("   Enter talent code >>");
             talent = Convert.ToChar(ReadLine());
             isValid = false;
@@ -92,10 +93,16 @@ class GreenvilleRevenue
                 else
                 {
                     contestants[x] = new Contestant();
-                    //you set the talent code and name here
+                    for (int z = 0; z < Contestant.TalentCodes.Length; ++z)
+                    {
+                        if(talent == Contestant.TalentCodes[z])
+                        {
+                            isValid = true;
+                            ++Contestant.counts[z];
+                        }
+                    }
                 }
                 //ProfM2 - this if condition is good but not necessary for the assignment so I would remove the if
-                if (!isValid)
                 {
                     WriteLine("{0} is not a valid code", talent);
                     Write("  enter talent code >> ");
@@ -107,53 +114,53 @@ class GreenvilleRevenue
         }
     }
     //ProfM2 - you need to match the method names that MindTap expects    
-    public static void getLists(int numThisYear, Contestant[] contestants)
+    public static void GetLists(int numThisYear, Contestant[] contestants)
         {
-            int x;
+            int x = 0;
             char QUIT = 'Z';
             char option = 'A';
             //ProfM2 - use the static talentCodesStrings and talentCodesStrings arrays below to remove the errors below in this method
-            Contestant aWorker = new Contestant { TalentCode = option };
+            contestants[x] = new Contestant();
             bool isValid;
             int pos = 0;
             bool found;
             WriteLine("\nThe types of talents are:");
-        for (x = 0; x < aWorker.counts.Length; ++x)
+             for (x = 0; x < Contestant.counts.Length; ++x)
             //ProfM2 - use the static talentCodesStrings
-            WriteLine("{0. -20}  {1, 5}", aWorker.talentCodesStrings[x], aWorker.counts[x]);
-        Write("Enter a talent type or {0} to quit >> ", QUIT);
-        option = Convert.ToChar(ReadLine());
-        while(option != QUIT)
-        {
-            isValid = false;
-            //ProfM2 - use the static talentCodes
-            for (int z = 0; z < aWorker.talentCodes.Length; ++z) 
-            {
-                if (option == aWorker.talentCodes[z])
-                {
-                    isValid = true;
-                    pos = z;
-                }
+            WriteLine("{0. -20}  {1, 5}", Contestant.TalentCodesStrings[x], Contestant.counts[x]);
+            Write("Enter a talent type or {0} to quit >> ", QUIT);
+            option = Convert.ToChar(ReadLine());
+            while(option != QUIT)
+                    {
+             isValid = false;
+                        //ProfM2 - use the static talentCodes
+             for (int z = 0; z < Contestant.TalentCodes.Length; ++z) 
+                        {
+              if (option == Contestant.TalentCodes[z])
+                            {
+              isValid = true;
+              pos = z;
+                            }
 
-            }
-            if (!isValid)
+                        }
+             if (!isValid)
                 WriteLine("{0} is not a valid code", option);
             else
             {
                 //ProfM2 - use the static talentCodesStrings
-                WriteLine("\nContestants with talent {0} are:", aWorker.talentCodesStrings[pos]);
+                WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
                 found = false;
                 for(x = 0; x < numThisYear; ++x)
                 {
-                    if(aWorker.Talent[x] == option)
+                    if(Contestant.TalentCodes[x] == option)
                     {
-                        WriteLine(aWorker.Name);
+                        WriteLine(x);
                         found = true;
                     }
                 }
                 if (!found)
                     //ProfM2 - use the static talentCodesStrings
-                    WriteLine("no contestants had talent {0}", aWorker.talentCodesStrings[pos]);
+                    WriteLine("no contestants had talent {0}", Contestant.TalentCodesStrings[pos]);
             }
             Write("\nEnter a talent type or {0} to quit >> ", QUIT);
             option = Convert.ToChar(ReadLine());
@@ -162,11 +169,13 @@ class GreenvilleRevenue
     }
 class Contestant
     {
-        public int[] counts = { 0, 0, 0, 0 };
+        public static int[] counts = { 0, 0, 0, 0 };
         //ProfM2 - this field needs to be static as per the start code
-        public static char[] talentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
+        public static char[] TalentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
         //ProfM2 - this field needs to be static as per the start code
-        public static string[] talentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
+        public static string[] TalentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
+        
+        public static string[] Names;
         public string Name
         {
             get { return Name; }

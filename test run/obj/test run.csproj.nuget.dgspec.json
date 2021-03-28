@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Homework\\test run\\test run\\test run.csproj": {}
+    "C:\\Users\\andre\\Source\\Repos\\abacon2\\Case-9-1\\test run\\test run.csproj": {}
   },
   "projects": {
-    "C:\\Homework\\test run\\test run\\test run.csproj": {
+    "C:\\Users\\andre\\Source\\Repos\\abacon2\\Case-9-1\\test run\\test run.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Homework\\test run\\test run\\test run.csproj",
+        "projectUniqueName": "C:\\Users\\andre\\Source\\Repos\\abacon2\\Case-9-1\\test run\\test run.csproj",
         "projectName": "test run",
-        "projectPath": "C:\\Homework\\test run\\test run\\test run.csproj",
+        "projectPath": "C:\\Users\\andre\\Source\\Repos\\abacon2\\Case-9-1\\test run\\test run.csproj",
         "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
-        "outputPath": "C:\\Homework\\test run\\test run\\obj\\",
+        "outputPath": "C:\\Users\\andre\\Source\\Repos\\abacon2\\Case-9-1\\test run\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
