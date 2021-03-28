@@ -64,7 +64,7 @@ class GreenvilleRevenue
             Write("Enter contestant name >> ");
             //ProfM2 - You are getting a null reference error here as the Contestant object is not instantiated (in memory)
             //Contestant.Names[x] = ReadLine();
-            entryString = ReadLine();
+            entryString = ReadLine(); 
             WriteLine("Talent codes are:");
             //ProfM2 - use the Contestant class static array
             for (int y = 0; y < Contestant.TalentCodesStrings.Length; ++y)
@@ -99,7 +99,7 @@ class GreenvilleRevenue
                             isValid = true;
                             contestants[x].TalentCode = talent;
                             //ProfM2 - you set the contestant name on the next line
-
+                            contestants[x].Name = entryString;
                         }
                     }
                 }
@@ -194,10 +194,11 @@ class Contestant
 
     //ProfM2 - Do not need this 
     //public static string[] Names;
+    private string name;
     public string Name
     {
-        get { return Name; }
-        set { Name = value; }
+        get { return this.name; }
+        set { this.name = value; }
     }
     private char talentCode;
     private string talent;
@@ -218,7 +219,7 @@ class Contestant
                 {
                     talentCode = value;
                     isValidTalentCode = true;
-                    //You set the talent here as per instruction #4
+                    talent = TalentCodesStrings[x];
                 }
             }
 
