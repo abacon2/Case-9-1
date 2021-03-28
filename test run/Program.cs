@@ -33,7 +33,7 @@ class GreenvilleRevenue
         WriteLine("Revenue expected this year is {0}", revenue.ToString("C"));
         Contestant[] contestants = new Contestant[MAX_CONTESTANTS];
         getContestantData(contestantNumber, contestants);
-        GetLists(contestantNumber, contestants);
+        getLists(contestantNumber, contestants);
     }
     public static int getContestantNumber(int min, int max)
     {
@@ -62,17 +62,16 @@ class GreenvilleRevenue
         while (x < numThisYear)
         {
             Write("Enter contestant name >> ");
-            Contestant.Names[x] = ReadLine();
-            //ProfM2 - here you are getting the StackOverflow exception because your property setter is just calling itself recursively. You will read of this in chapter 10 p. 444
-            //Contestant aWorker = new Contestant { Name = entryString };
-            //ProfM2 - instead of instantiating your Contestant this way, use the Contestant array that is passed into this method
+            //ProfM2 - You are getting a null reference error here as the Contestant object is not instantiated (in memory)
+            //Contestant.Names[x] = ReadLine();
+            entryString = ReadLine();
             WriteLine("Talent codes are:");
             //ProfM2 - use the Contestant class static array
-
-            for (int y = 0; y < contestants.Length; ++y)
+            for (int y = 0; y < Contestant.TalentCodesStrings.Length; ++y)
                 WriteLine("  {0}   {1}", Contestant.TalentCodes[y], Contestant.TalentCodesStrings[y]);
             Write("   Enter talent code >>");
-            talent = Convert.ToChar(ReadLine());
+            //ProfM2 - you do not need this as you are getting the input in line 88 AND checking that it is a char datatype.
+            //talent = Convert.ToChar(ReadLine());
             isValid = false;
             while (!isValid)
             {
@@ -98,72 +97,90 @@ class GreenvilleRevenue
                         if (talent == Contestant.TalentCodes[z])
                         {
                             isValid = true;
-                            ++Contestant.counts[z];
+                            contestants[x].TalentCode = talent;
+                            //ProfM2 - you set the contestant name on the next line
+
                         }
                     }
                 }
-                //ProfM2 - this if condition is good but not necessary for the assignment so I would remove the if
-                {
-                    WriteLine("{0} is not a valid code", talent);
-                    Write("  enter talent code >> ");
-                    talent = Convert.ToChar(ReadLine());
-                }
+                //ProfM2 - this if condition is good but not necessary for the assignment so I would remove the entire if
+                //{
+                //    WriteLine("{0} is not a valid code", talent);
+                //    Write("  enter talent code >> ");
+                //    talent = Convert.ToChar(ReadLine());
+                //}
             }
             ++x;
 
         }
     }
     //ProfM2 - you need to match the method names that MindTap expects    
-    public static void GetLists(int numThisYear, Contestant[] contestants)
+    public static void getLists(int numThisYear, Contestant[] contestants)
     {
         int x = 0;
         char QUIT = 'Z';
         char option = 'A';
         //ProfM2 - use the static talentCodesStrings and talentCodesStrings arrays below to remove the errors below in this method
-        contestants[x] = new Contestant();
+        //contestants[x] = new Contestant();
         bool isValid;
         int pos = 0;
         bool found;
         WriteLine("\nThe types of talents are:");
         for (x = 0; x < Contestant.counts.Length; ++x)
             //ProfM2 - use the static talentCodesStrings
-            WriteLine("{0. -20}  {1, 5}", Contestant.TalentCodesStrings[x], Contestant.counts[x]);
+            WriteLine("{0, -20}  {1, 5}", Contestant.TalentCodes[x], Contestant.TalentCodesStrings[x]);
         Write("Enter a talent type or {0} to quit >> ", QUIT);
-        option = Convert.ToChar(ReadLine());
-        while (option != QUIT)
+        isValid = false;
+        //ProfM2 - I corrected this section with a while loop
+        while (!isValid)
         {
-            isValid = false;
-            //ProfM2 - use the static talentCodes
-            for (int z = 0; z < Contestant.TalentCodes.Length; ++z)
+            if (!char.TryParse(ReadLine(), out option))
             {
-                if (option == Contestant.TalentCodes[z])
-                {
-                    isValid = true;
-                    pos = z;
-                }
-
+                isValid = false;
+                //10 Appropriate messages are displayed if the entered code is not a character or a valid code.
+                WriteLine("Invalid format - entry must be a single character");
+                Write("\nEnter a talent type or {0} to quit >> ", QUIT);
             }
-            if (!isValid)
-                WriteLine("{0} is not a valid code", option);
             else
             {
-                //ProfM2 - use the static talentCodesStrings
-                WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
-                found = false;
-                for (x = 0; x < numThisYear; ++x)
+                if (option == QUIT)
+                    isValid = true;
+                else
                 {
-                    if (Contestant.TalentCodes[x] == option)
+                    for (int z = 0; z < Contestant.TalentCodes.Length; ++z)
                     {
-                        WriteLine(x);
-                        found = true;
+                        if (option == Contestant.TalentCodes[z])
+                        {
+                            isValid = true;
+                            pos = z;
+                        }
+                    }
+                    if (!isValid)
+                    {
+                        //10
+                        WriteLine("{0} is not a valid code", option);
+                        Write("\nEnter a talent type or {0} to quit >> ", QUIT);
+                    }
+                    else
+                    {
+                        WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
+                        found = false;
+                        for (x = 0; x < numThisYear; ++x)
+                        {
+                            if (contestants[x].TalentCode == option)
+                            {
+                                WriteLine(contestants[x].Name);
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                            //10
+                            WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
+
+                        Write("\nEnter a talent type or {0} to quit >> ", QUIT);
                     }
                 }
-                if (!found)
-                    //ProfM2 - use the static talentCodesStrings
-                    WriteLine("no contestants had talent {0}", Contestant.TalentCodesStrings[pos]);
             }
-            Write("\nEnter a talent type or {0} to quit >> ", QUIT);
-            option = Convert.ToChar(ReadLine());
         }
     }
 }
@@ -175,7 +192,8 @@ class Contestant
     //ProfM2 - this field needs to be static as per the start code
     public static string[] TalentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
 
-    public static string[] Names;
+    //ProfM2 - Do not need this 
+    //public static string[] Names;
     public string Name
     {
         get { return Name; }
@@ -191,7 +209,24 @@ class Contestant
         }
         set
         {
+            //ProfM2 - you will need to complete this set accessor so the code assigns a code only if it is valid
+            //I have completed most of this for you
+            bool isValidTalentCode = false;
+            for (int x = 0; x < TalentCodes.Length; ++x)
+            {
+                if (TalentCodes[x] == value)
+                {
+                    talentCode = value;
+                    isValidTalentCode = true;
+                    //You set the talent here as per instruction #4
+                }
+            }
 
+            if (!isValidTalentCode)
+            {
+                talentCode = 'I';
+                talent = "Invalid";
+            }
         }
     }
     public string Talent
@@ -202,6 +237,3 @@ class Contestant
         }
     }
 }
-
-
-
