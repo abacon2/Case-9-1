@@ -67,8 +67,8 @@ class GreenvilleRevenue
             entryString = ReadLine(); 
             WriteLine("Talent codes are:");
             //ProfM2 - use the Contestant class static array
-            for (int y = 0; y < Contestant.TalentCodesStrings.Length; ++y)
-                WriteLine("  {0}   {1}", Contestant.TalentCodes[y], Contestant.TalentCodesStrings[y]);
+            for (int y = 0; y < Contestant.talentStrings.Length; ++y)
+                WriteLine("  {0}   {1}", Contestant.talentCodes[y], Contestant.talentStrings[y]);
             Write("   Enter talent code >>");
             //ProfM2 - you do not need this as you are getting the input in line 88 AND checking that it is a char datatype.
             //talent = Convert.ToChar(ReadLine());
@@ -92,9 +92,9 @@ class GreenvilleRevenue
                 else
                 {
                     contestants[x] = new Contestant();
-                    for (int z = 0; z < Contestant.TalentCodes.Length; ++z)
+                    for (int z = 0; z < Contestant.talentCodes.Length; ++z)
                     {
-                        if (talent == Contestant.TalentCodes[z])
+                        if (talent == Contestant.talentCodes[z])
                         {
                             isValid = true;
                             contestants[x].TalentCode = talent;
@@ -128,7 +128,7 @@ class GreenvilleRevenue
         WriteLine("\nThe types of talents are:");
         for (x = 0; x < Contestant.counts.Length; ++x)
             //ProfM2 - use the static talentCodesStrings
-            WriteLine("{0, -20}  {1, 5}", Contestant.TalentCodes[x], Contestant.TalentCodesStrings[x]);
+            WriteLine("{0, -20}  {1, 5}", Contestant.talentCodes[x], Contestant.talentStrings[x]);
         Write("Enter a talent type or {0} to quit >> ", QUIT);
         isValid = false;
         //ProfM2 - I corrected this section with a while loop
@@ -147,9 +147,9 @@ class GreenvilleRevenue
                     isValid = true;
                 else
                 {
-                    for (int z = 0; z < Contestant.TalentCodes.Length; ++z)
+                    for (int z = 0; z < Contestant.talentCodes.Length; ++z)
                     {
-                        if (option == Contestant.TalentCodes[z])
+                        if (option == Contestant.talentCodes[z])
                         {
                             isValid = true;
                             pos = z;
@@ -163,7 +163,7 @@ class GreenvilleRevenue
                     }
                     else
                     {
-                        WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
+                        WriteLine("\nContestants with talent {0} are:", Contestant.talentStrings[pos]);
                         found = false;
                         for (x = 0; x < numThisYear; ++x)
                         {
@@ -175,7 +175,7 @@ class GreenvilleRevenue
                         }
                         if (!found)
                             //10
-                            WriteLine("\nContestants with talent {0} are:", Contestant.TalentCodesStrings[pos]);
+                            WriteLine("\nContestants with talent {0} are:", Contestant.talentStrings[pos]);
 
                         Write("\nEnter a talent type or {0} to quit >> ", QUIT);
                     }
@@ -188,9 +188,9 @@ class Contestant
 {
     public static int[] counts = { 0, 0, 0, 0 };
     //ProfM2 - this field needs to be static as per the start code
-    public static char[] TalentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
+    public static char[] talentCodes { get; set; } = { 'S', 'D', 'M', 'O' };
     //ProfM2 - this field needs to be static as per the start code
-    public static string[] TalentCodesStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
+    public static string[] talentStrings { get; set; } = { "Singing", "Dancing", "Musical instrument", "Other" };
 
     //ProfM2 - Do not need this 
     //public static string[] Names;
@@ -213,13 +213,13 @@ class Contestant
             //ProfM2 - you will need to complete this set accessor so the code assigns a code only if it is valid
             //I have completed most of this for you
             bool isValidTalentCode = false;
-            for (int x = 0; x < TalentCodes.Length; ++x)
+            for (int x = 0; x < talentCodes.Length; ++x)
             {
-                if (TalentCodes[x] == value)
+                if (talentCodes[x] == value)
                 {
                     talentCode = value;
                     isValidTalentCode = true;
-                    talent = TalentCodesStrings[x];
+                    talent = talentStrings[x];
                 }
             }
 
